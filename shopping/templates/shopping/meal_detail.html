@@ -2,45 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>{{ meal.name }}</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        .recipe-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+    </style>
 </head>
-<body>
-    <p>
-        <a href="{% url 'shopping:meal-list' %}">
-            Back to meals
-        </a>
-    </p>
 
-    <h1>{{ meal.name }}</h1>
+<body class="bg-light">
+    <div class="container py-5">
 
-    <p>{{ meal.description }}</p>
+        <p>
+            <a
+                href="{% url 'shopping:meal-list' %}"
+                class="btn btn-outline-secondary"
+            >
+                &larr; Back to meals
+            </a>
+        </p>
 
-    <p>Serves {{ meal.base_servings }}</p>
+        <article class="card shadow-sm overflow-hidden">
 
-    <h2>Ingredients</h2>
+            {% if meal.image %}
+                <img
+                    src="{{ meal.image.url }}"
+                    class="card-img-top recipe-image"
+                    alt="{{ meal.name }}"
+                >
+            {% endif %}
 
-    {% if meal.meal_products.all %}
-        <ul>
-            {% for ingredient in meal.meal_products.all %}
-                <li>
-                    {{ ingredient.quantity }}
-                    {{ ingredient.get_unit_display }}
-                    {{ ingredient.product.name }}
+            <div class="card-body p-4">
+                <h1 class="card-title mb-3">
+                    {{ meal.name }}
+                </h1>
 
-                    {% if ingredient.notes %}
-                        — {{ ingredient.notes }}
+                {% if meal.description %}
+                    <p class="card-text text-body-secondary">
+                        {{ meal.description }}
+                    </p>
+                {% endif %}
+
+                <p>
+                    <span class="badge text-bg-primary">
+                        Serves {{ meal.base_servings }}
+                    </span>
+
+                    {% if meal.favourite %}
+                        <span class="badge text-bg-warning">
+                            Favourite
+                        </span>
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No ingredients have been added.</p>
-    {% endif %}
+                </p>
 
-    {% if meal.instructions %}
-        <h2>Instructions</h2>
-        <p>{{ meal.instructions|linebreaks }}</p>
-    {% endif %}
+                <hr>
+
+                <div class="row g-4">
+                    <section class="col-md-5">
+                        <h2 class="h4">Ingredients</h2>
+
+                        {% if meal.meal_products.all %}
+                            <ul class="list-group list-group-flush">
+                                {% for ingredient in meal.meal_products.all %}
+                                    <li class="list-group-item px-0">
+                                        {% if ingredient.unit == "g" or ingredient.unit == "kg" or ingredient.unit == "ml" or ingredient.unit == "l" or ingredient.unit == "tbsp" or ingredient.unit == "tsp" %}
+                                            {{ ingredient.quantity|floatformat:"-2" }}{{ ingredient.get_unit_display }} {{ ingredient.product.name }}
+                                        {% elif ingredient.unit == "item" %}
+                                            {{ ingredient.quantity|floatformat:"-2" }} {{ ingredient.product.name }}
+                                        {% else %}
+                                            {{ ingredient.quantity|floatformat:"-2" }} {{ ingredient.get_unit_display }} {{ ingredient.product.name }}
+                                        {% endif %}
+
+                                        {% if ingredient.notes %}
+                                            <div class="small text-body-secondary">
+                                                {{ ingredient.notes }}
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-body-secondary">
+                                No ingredients have been added.
+                            </p>
+                        {% endif %}
+                    </section>
+
+                    <section class="col-md-7">
+                        <h2 class="h4">Instructions</h2>
+
+                        {% if meal.instructions %}
+                            <div class="card-text">
+                                {{ meal.instructions|linebreaks }}
+                            </div>
+                        {% else %}
+                            <p class="text-body-secondary">
+                                No instructions have been added.
+                            </p>
+                        {% endif %}
+                    </section>
+                </div>
+            </div>
+        </article>
+    </div>
 </body>
 </html>

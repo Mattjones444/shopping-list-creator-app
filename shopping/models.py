@@ -17,16 +17,16 @@ class ShoppingSection(models.Model):
 
 class Product(models.Model):
     class Unit(models.TextChoices):
-        GRAM = "g", "Grams"
-        KILOGRAM = "kg", "Kilograms"
-        MILLILITRE = "ml", "Millilitres"
-        LITRE = "l", "Litres"
-        ITEM = "item", "Item"
-        PACK = "pack", "Pack"
-        TIN = "tin", "Tin"
-        BOTTLE = "bottle", "Bottle"
-        TABLESPOON = "tbsp", "Tablespoon"
-        TEASPOON = "tsp", "Teaspoon"
+        GRAM = "g", "g"
+        KILOGRAM = "kg", "kg"
+        MILLILITRE = "ml", "ml"
+        LITRE = "l", "l"
+        ITEM = "item", "item"
+        PACK = "pack", "pack"
+        TIN = "tin", "tin"
+        BOTTLE = "bottle", "bottle"
+        TABLESPOON = "tbsp", "tbsp"
+        TEASPOON = "tsp", "tsp"
 
     name = models.CharField(max_length=150, unique=True)
 
