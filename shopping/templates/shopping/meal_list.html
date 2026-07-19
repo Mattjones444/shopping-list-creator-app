@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meals</title>
+</head>
+<body>
+    <h1>Meals</h1>
+
+    {% if meals %}
+        <ul>
+            {% for meal in meals %}
+                <li>
+                    <a href="{% url 'shopping:meal-detail' meal.pk %}">
+                        {{ meal.name }}
+                    </a>
+
+                    <p>{{ meal.description }}</p>
+                    <p>Serves {{ meal.base_servings }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No meals have been added yet.</p>
+    {% endif %}
+</body>
+</html>

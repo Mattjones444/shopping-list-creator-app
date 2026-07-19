@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ meal.name }}</title>
+</head>
+<body>
+    <p>
+        <a href="{% url 'shopping:meal-list' %}">
+            Back to meals
+        </a>
+    </p>
+
+    <h1>{{ meal.name }}</h1>
+
+    <p>{{ meal.description }}</p>
+
+    <p>Serves {{ meal.base_servings }}</p>
+
+    <h2>Ingredients</h2>
+
+    {% if meal.meal_products.all %}
+        <ul>
+            {% for ingredient in meal.meal_products.all %}
+                <li>
+                    {{ ingredient.quantity }}
+                    {{ ingredient.get_unit_display }}
+                    {{ ingredient.product.name }}
+
+                    {% if ingredient.notes %}
+                        — {{ ingredient.notes }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No ingredients have been added.</p>
+    {% endif %}
+
+    {% if meal.instructions %}
+        <h2>Instructions</h2>
+        <p>{{ meal.instructions|linebreaks }}</p>
+    {% endif %}
+</body>
+</html>
